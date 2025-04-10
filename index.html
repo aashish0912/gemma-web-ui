@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Gemma API Chat</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 60px auto;
+      background: #1e1e1e;
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      margin-bottom: 10px;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    #responseBox {
+      white-space: pre-wrap;
+      background: #2d2d2d;
+      padding: 10px;
+      border-radius: 8px;
+      margin-top: 15px;
+      border-left: 4px solid #4CAF50;
+    }
+  </style>
+</head>
+<body>
+  <h2>Talk to Gemma 🤖</h2>
+  <textarea id="promptInput" rows="5" placeholder="Type your message here..."></textarea>
+  <button onclick="sendPrompt()">Send</button>
+  <div id="responseBox"></div>
+
+  <script>
+    async function sendPrompt() {
+      const prompt = document.getElementById('promptInput').value;
+      const responseBox = document.getElementById('responseBox');
+      responseBox.textContent = 'Thinking...';
+
+      try {
+        const res = await fetch('https://5272-2409-40d1-8d-502b-a5ee-7f98-1f19-57aa.ngrok-free.appe', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            // 'x-api-key': 'your_secret_key' // If you added auth
+          },
+          body: JSON.stringify({ prompt })
+        });
+
+        const data = await res.json();
+        responseBox.textContent = data.response || 'No response received.';
+      } catch (err) {
+        responseBox.textContent = 'Error: ' + err.message;
+      }
+    }
+  </script>
+</body>
+</html>
